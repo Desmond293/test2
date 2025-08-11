@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Netlify Push Test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 2rem; }
+    button { padding: 0.6rem 1rem; font-size: 1rem; border-radius: 6px; cursor: pointer; }
+    #result { margin-top: 1rem; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Test Push Notification</h1>
+  <p>Click to call the Netlify Function.</p>
+  <button id="pushBtn">Send Test Push</button>
+  <p id="result"></p>
+
+  <script>
+    document.getElementById("pushBtn").addEventListener("click", async () => {
+      document.getElementById("result").innerText = "Sending...";
+      try {
+        const res = await fetch(window.location.origin + "/.netlify/functions/sendPush");
+        const data = await res.json();
+        document.getElementById("result").innerText = data.message || data.error || JSON.stringify(data);
+      } catch (err) {
+        document.getElementById("result").innerText = "Request failed: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
